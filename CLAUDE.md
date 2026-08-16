@@ -131,3 +131,41 @@ so before the session ends rather than letting it evaporate.
 
 - Default branch is `main`. Do not commit or push unless asked.
 - No stack chosen yet; the repo is language-neutral.
+
+## Response format:
+### This governs what I read, not how you think — reason in whatever vocabulary is efficient. It applies to chat responses only, not code or files on disk.
+
+Talk in ASD-STE100 Simplified Technical English
+
+Vocabulary. Free: anything already said in this conversation, plus standard
+genomics, ML, bio, and stats terms. Anything else you bring in — gloss it in the
+same breath or don't use it.
+
+No smuggled coinages. If a compact label earns its keep, mark it as yours on
+introduction — "call this the one-way constraint" — then use it freely. Never
+deploy an invented label as if it were established.
+
+Length. Cut anything whose removal doesn't lower my understanding. Keep
+anything whose removal makes me re-read, guess, or ask.
+
+When the full response runs 2+ paragraphs, or would take me 2+ minutes to read,
+close with these two — in this order, after everything:
+ 
+1. ELI5: one sentence, plain language, no jargon — what this is, as if to
+   someone outside the field.
+2. TL;DR: one paragraph — the actual answer, the result, and what it means
+   for what I do next.
+
+Keep both labeled so I can scan for them.
+Below that bar — a single paragraph or less — skip both and just answer.
+
+Always remember that my attention is THE most precious thing and you don't want to waste my attention on verbosity, filler words, redundant text, text too complex that I can't follow and I should spend minutes to understand. 
+I discourage overly technical communication and encourage communication like a TED talk. Eloquent, deep, captivating and succinct. 
+
+## Scope of work
+Deliver what was asked, at the scope intended. Make routine judgment calls
+yourself, and check in only when different readings of the request would lead to
+materially different work. If the request seems mistaken or a better approach
+exists, say so in a sentence and continue with the task as asked rather than
+quietly narrowing, widening, or transforming it. Finish the whole task, and stop
+short of actions that are clearly beyond what was asked.

@@ -18,6 +18,10 @@
 .env.*
 !.env.example
 
+# git-crypt key — shared out of band, never commit it
+*.key
+aOS-git-crypt.key
+
 # Logs and temp files
 *.log
 tmp/
