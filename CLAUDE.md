@@ -72,8 +72,8 @@ That is normal — do not "fix" it.
 
 - Never edit a file in `.notion/mirror/` by hand. It is a machine-written record
   of what Notion said. Editing it corrupts the next diff.
-- The mirror is read-only downstream. Do not push repo edits back into Notion
-  unless the user explicitly asks.
+- The mirror is read-only downstream. Do not push repo *edits* back into Notion.
+  The one exception is capturing new ideas — see the next section.
 - If the diff is empty, say "no change since last sync" rather than re-deriving
   the document from scratch.
 - Report what changed in plain terms — "they added two use cases and dropped the
@@ -86,6 +86,46 @@ That is normal — do not "fix" it.
 Fetch page `3bea13e24a178057af8ee25310b39749` → overwrite
 `.notion/mirror/VISION.md` → `git diff -- .notion/mirror/` to see what the humans
 added → write `/VISION.md` from the current Notion content → commit both.
+
+## The IP lives in Notion — capture ideas upstream
+
+**Treat the code as close to free. The intellectual property of aOS is the ideas
+behind the code, and those live in Notion.** A good idea that exists only in a
+Claude Code chat log is an idea that is effectively lost: the humans cannot see
+it, the collaborator cannot build on it, and the next session starts without it.
+
+So: whenever a genuine design idea, mechanism, name, or architectural decision
+first appears **here in a chat** rather than in Notion, write the IP part of it
+back to Notion, then refresh the mirror.
+
+### What counts as the IP part
+
+Capture the *idea*, not the transcript. The core concept, why it matters, what it
+rules in or out, and any decision that would be expensive to rediscover.
+
+Leave behind the implementation detail, the debugging, the file paths, and the
+chat back-and-forth. If the idea would still be valuable to someone who never
+saw this repo, it is IP. If it only makes sense next to the code, it is not.
+
+### Procedure
+
+1. Draft the entry — a short titled block: the idea, the reasoning, the open
+   question it leaves.
+2. **Show the draft to the user before writing it.** Notion is shared with a
+   second human, so writing there is a change other people see. Get a yes.
+3. Write it to Notion under the aOS root — append to the page it belongs to if
+   one clearly fits, otherwise create a child page `IDEAS.md` under aOS and
+   append there. Use the Notion MCP write tools.
+4. Add the new page to `.notion/sources.json` if you created one.
+5. Re-fetch the page and overwrite its file in `.notion/mirror/`, so the mirror
+   matches Notion exactly. Never hand-write the mirror copy — fetch it.
+6. Commit the mirror update.
+
+### When to do it
+
+At the natural end of a thread of thinking, not after every message. If a
+conversation produced something worth keeping and it has not been captured, say
+so before the session ends rather than letting it evaporate.
 
 ## Repo conventions
 
