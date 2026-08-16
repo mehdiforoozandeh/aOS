@@ -1,0 +1,6 @@
+# Everything under .notion/ is encrypted at rest on GitHub via git-crypt.
+# Collaborators unlock with the shared key; the public sees ciphertext.
+.notion/** filter=git-crypt diff=git-crypt
+
+# .gitattributes itself must stay readable.
+.gitattributes !filter !diff
