@@ -32,6 +32,25 @@ change in Notion since Claude last looked?"
 
 `.notion/sources.json` maps Notion page IDs to mirror paths.
 
+### `.notion/` is encrypted — collaborators only
+
+This repo is public, but everything under `.notion/` is encrypted with
+[git-crypt](https://github.com/AGWA/git-crypt) (see `.gitattributes`). GitHub
+stores ciphertext; only people holding the shared symmetric key can read it.
+
+If `.notion/` files look like binary garbage, the repo is locked. Unlock it:
+
+```bash
+git crypt unlock /path/to/aOS-git-crypt.key
+```
+
+The key is shared out of band — never commit it, never paste it into a chat, an
+issue, or a Notion page. If an agent cannot unlock, it must say the mirror is
+unreadable and stop, not fabricate the contents.
+
+Files under `.notion/` are plaintext in the working tree and ciphertext in git.
+That is normal — do not "fix" it.
+
 ### Procedure — always do this before acting on a Notion doc
 
 1. Fetch the page with `notion-fetch` using the ID from `.notion/sources.json`.
