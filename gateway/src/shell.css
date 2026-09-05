@@ -1,0 +1,196 @@
+/* The chrome around the screen — dock, surface frame, input bar, trace panel.
+   Conforms to mindmap.io DESIGN.md. Paper ground, one chromatic colour,
+   hairline borders, motion only on transform and opacity. */
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--canvas); }
+
+.stage {
+  min-height: 100vh; display: flex; flex-direction: row;
+  align-items: flex-start; justify-content: center;
+  gap: var(--space-6); padding: var(--space-6);
+  font-family: var(--font);
+  color: var(--ink);
+}
+.column { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+
+.phone {
+  width: 390px; height: 844px; border-radius: 46px; background: var(--canvas);
+  border: 9px solid var(--ink); box-shadow: var(--e-modal);
+  overflow: hidden; position: relative; display: flex; flex-direction: column;
+  transition: border-color var(--t-control) var(--ease-micro);
+}
+.notch {
+  position: absolute; top: 9px; left: 50%; transform: translateX(-50%);
+  width: 108px; height: 26px; background: var(--ink);
+  border-radius: var(--r-full); z-index: 5;
+}
+.device {
+  font-size: var(--text-xs); font-weight: 500; color: var(--ink-subtle);
+  display: flex; align-items: center; gap: var(--space-3);
+}
+.reset {
+  font: inherit; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-sm); color: var(--ink-muted);
+  padding: 2px var(--space-2);
+  transition: color var(--t-micro) var(--ease-micro),
+              border-color var(--t-micro) var(--ease-micro);
+}
+.reset:hover { color: var(--accent); border-color: var(--accent); }
+.reset:active { transform: scale(0.97); }
+
+/* --- the surface: one screen, full bleed ------------------------------- */
+
+.body {
+  flex: 1; display: flex; flex-direction: column;
+  padding-top: 44px; min-height: 0; overflow: hidden;
+}
+
+.idle {
+  margin: auto; text-align: center; display: flex; flex-direction: column;
+  gap: var(--space-4); padding: var(--space-4);
+}
+.sup {
+  font-size: var(--text-hero); font-weight: 700;
+  letter-spacing: -0.02em; line-height: 1.1; color: var(--ink);
+}
+.offline { font-size: var(--text-xs); color: var(--ink-subtle); max-width: 26ch; margin: 0 auto; }
+
+/* The screen the agent sent, filling the page. No frame, no chrome. */
+.body > .screen { flex: 1; min-height: 0; }
+
+/* Still working: the phone itself becomes the living thing. */
+.phone.is-working { border-color: var(--accent); }
+
+.thinking {
+  margin: auto; display: flex; flex-direction: column;
+  align-items: center; gap: var(--space-3);
+}
+.thinking span {
+  font-size: var(--text-xs); font-weight: 500; color: var(--ink-subtle);
+}
+
+/* --- the input bar, always there ---------------------------------------- */
+
+.bar {
+  flex: none; border-top: 1px solid var(--hairline); background: var(--scrim);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: space-around;
+  padding: var(--space-3) var(--space-5) var(--space-6); gap: var(--space-3);
+}
+.bar button {
+  background: none; border: 0; cursor: pointer; line-height: 1;
+  color: var(--ink-muted); padding: var(--space-2) var(--space-3);
+  border-radius: var(--r-md);
+  transition: color var(--t-micro) var(--ease-micro);
+}
+.bar button:hover { color: var(--accent); }
+.bar button:active { transform: scale(0.97); }
+
+.compose { flex: 1; display: flex; }
+.compose input {
+  flex: 1; font: inherit; font-size: var(--text-base);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 8px; border: 1px solid var(--hairline);
+  background: var(--surface); color: var(--ink);
+  transition: border-color var(--t-micro) var(--ease-micro);
+}
+.compose input::placeholder { color: var(--ink-subtle); }
+.compose input:focus { outline: none; border-color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .phone, .bar button, .compose input { transition: none; }
+}
+
+/* --- the trace: raw messages, monospace, nothing elided ------------------ */
+
+.trace {
+  width: 440px; max-height: 880px; overflow-y: auto;
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-radius: var(--r-md); box-shadow: var(--e-card);
+  color: var(--ink);
+}
+.trace header {
+  position: sticky; top: 0; z-index: 1;
+  background: var(--scrim); backdrop-filter: blur(12px);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--hairline);
+  font-size: var(--text-xs); font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-subtle);
+}
+.trace header button {
+  font: inherit; text-transform: inherit; letter-spacing: inherit;
+  border: 0; background: none; color: var(--ink-subtle); cursor: pointer;
+  transition: color var(--t-micro) var(--ease-micro);
+}
+.trace header button:hover { color: var(--accent); }
+
+.trace ol { list-style: none; margin: 0; padding: var(--space-2) 0; }
+.trace > ol > li {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid transparent;
+  border-bottom: 1px solid var(--hairline);
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.trace > ol > li:last-child { border-bottom: 0; }
+.trace .empty { color: var(--ink-subtle); font-size: var(--text-sm); }
+
+.trace .row { display: flex; justify-content: space-between; gap: var(--space-2); align-items: baseline; }
+.trace .kind {
+  font-size: var(--text-xs); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-subtle);
+}
+.trace time { font-size: var(--text-xs); color: var(--ink-subtle); font-variant-numeric: tabular-nums; }
+
+/* Role stripes: who is speaking, at a glance. */
+.trace .user      { border-left-color: var(--ink); }
+.trace .assistant { border-left-color: var(--connector); }
+.trace .tool      { border-left-color: var(--accent); }
+.trace .system    { border-left-color: var(--hairline); }
+.trace .tool .kind { color: var(--accent); }
+
+.raw { position: relative; }
+.raw pre {
+  margin: 0; padding: var(--space-3);
+  background: var(--canvas); border: 1px solid var(--hairline);
+  border-radius: var(--r-sm);
+  font-family: ui-monospace, 'SF Mono', monospace;
+  font-size: 11.5px; line-height: 1.55; color: var(--ink);
+  white-space: pre-wrap; overflow-wrap: anywhere;
+  max-height: 340px; overflow: auto;
+}
+/* The document that made the screen. Marked, never truncated. */
+.raw.document pre { border-color: var(--accent); background: var(--surface); }
+
+.copy {
+  position: absolute; top: var(--space-1); right: var(--space-1); z-index: 1;
+  font: inherit; font-size: var(--text-xs); font-weight: 500;
+  border: 1px solid var(--hairline); background: var(--surface);
+  color: var(--ink-subtle); border-radius: var(--r-sm);
+  padding: 1px var(--space-2); cursor: pointer; opacity: 0;
+  transition: opacity var(--t-micro) var(--ease-micro), color var(--t-micro) var(--ease-micro);
+}
+.raw:hover .copy { opacity: 1; }
+.copy:hover { color: var(--accent); border-color: var(--accent); }
+
+.call { display: flex; flex-direction: column; gap: var(--space-2); }
+.call-name {
+  font-family: ui-monospace, 'SF Mono', monospace; font-size: var(--text-xs);
+  font-weight: 600; color: var(--accent);
+}
+
+.reasoning summary {
+  font-size: var(--text-xs); font-weight: 500; color: var(--ink-subtle);
+  cursor: pointer; list-style: none;
+}
+.reasoning summary::before { content: "▸ "; }
+.reasoning[open] summary::before { content: "▾ "; }
+.reasoning pre {
+  margin: var(--space-2) 0 0; padding: var(--space-2);
+  font-family: inherit; font-size: var(--text-xs); line-height: 1.5;
+  color: var(--ink-subtle); white-space: pre-wrap;
+  border-left: 1px solid var(--hairline);
+}
+
+.finish { font-size: var(--text-xs); color: var(--ink-subtle); font-family: ui-monospace, monospace; }

@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "gateway-ui",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": [
+        "-c",
+        "[ -s \"$HOME/.nvm/nvm.sh\" ] && . \"$HOME/.nvm/nvm.sh\" && nvm use 22 >/dev/null 2>&1; exec npm run dev --prefix gateway -- --port 5273"
+      ],
+      "port": 5273
+    }
+  ]
+}

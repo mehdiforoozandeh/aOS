@@ -1,0 +1,338 @@
+/* ---------------------------------------------------------------------------
+ * aOS screen theme — conforms to mindmap.io DESIGN.md (alpha).
+ *
+ * The agent never sees this file and cannot express a colour, a size or a
+ * position. It chooses a tag; this decides what the tag looks like.
+ *
+ * Token names below mirror the DESIGN.md keys exactly, so a spec written as
+ * {colors.accent} or {elevation.node-active} maps to one variable here.
+ * Dark mode is deliberately absent: DESIGN.md § 12 lists it as unspecified,
+ * and the rule is propose, do not invent.
+ * ------------------------------------------------------------------------ */
+
+:root {
+  /* Ground */
+  --canvas: #f7f7f4;
+  --surface: #ffffff;
+  --scrim: rgba(247, 247, 244, 0.8);
+
+  /* Accent — the only chromatic colour on UI surfaces */
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+  --accent-tint: rgba(13, 148, 136, 0.1);
+  --accent-glow: rgba(13, 148, 136, 0.12);
+
+  /* Ink */
+  --ink: #1a1a2e;
+  --ink-muted: #6b6b7b;
+  --ink-subtle: #9b9bab;
+
+  /* Lines */
+  --hairline: #e5e5e0;
+  --node-border: #d1d5db;
+  --connector: #9ca3af;
+
+  /* Semantic states — feedback only, never decorative */
+  --error: #dc2626;
+  --error-soft: #f87171;
+  --warning: #f59e0b;
+  --warning-soft: #fbbf24;
+
+  /* Node tints — map objects only, never chrome, never text */
+  --node-tint-rose: #fbeaec;
+  --node-tint-sage: #e8efe9;
+  --node-tint-mint: #e4f4f2;
+  --node-tint-sky: #e7f2fa;
+
+  /* Type */
+  --font: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+  --text-hero: clamp(2.5rem, 6vw, 4rem);
+  --text-2xl: clamp(1.5rem, 1.5vw + 1rem, 2rem);
+  --text-xl: clamp(1.25rem, 1vw + 1rem, 1.5rem);
+  --text-lg: clamp(1.0625rem, 0.75vw + 0.9375rem, 1.25rem);
+  --text-base: clamp(0.9375rem, 0.5vw + 0.875rem, 1rem);
+  --text-sm: clamp(0.8125rem, 0.5vw + 0.75rem, 0.875rem);
+  --text-xs: 0.75rem;
+
+  /* Radius */
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-full: 9999px;
+
+  /* Space — pick from the scale, never invent a 14px */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+
+  /* Elevation */
+  --e-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --e-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --e-node: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --e-node-active: 0 2px 8px var(--accent-glow);
+  --e-control: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --e-control-hover: 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+  --e-dropdown: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --e-modal: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Motion — the house curve, and nothing in the app past 300ms */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-micro: ease;
+  --t-micro: 150ms;
+  --t-control: 200ms;
+  --t-ui-max: 300ms;
+
+  color-scheme: light;
+}
+
+/* --- the screen ---------------------------------------------------------- */
+
+/* The screen is the container, not the window. Sizing rules must ask how wide
+   *this* is — a viewport media query never fires here, because the browser
+   window is desktop-sized while the screen inside it is 372px. That mistake is
+   why a three-column grid clipped "Icelandair". */
+.screen { container-type: inline-size; container-name: screen; }
+
+.screen {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--canvas);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: 100%;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- prose: mdocUI's renderer covers h1-h3, ul and ol ------------------- */
+
+[data-mdocui-prose] { display: flex; flex-direction: column; gap: var(--space-2); }
+[data-mdocui-prose] h1 {
+  font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em;
+  line-height: 1.1; margin: 0; color: var(--ink);
+}
+[data-mdocui-prose] h2 {
+  font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin: 0;
+}
+[data-mdocui-prose] h3 {
+  font-size: var(--text-base); font-weight: 500; color: var(--ink-muted); margin: 0;
+}
+[data-mdocui-prose] p { margin: 0; color: var(--ink-muted); }
+[data-mdocui-prose] ul,
+[data-mdocui-prose] ol {
+  margin: 0; padding-left: var(--space-5); color: var(--ink-muted);
+  display: flex; flex-direction: column; gap: var(--space-1);
+}
+[data-mdocui-prose] strong { font-weight: 600; color: var(--ink); }
+[data-mdocui-prose] code {
+  font-family: ui-monospace, 'SF Mono', monospace; font-size: var(--text-sm);
+  background: var(--canvas); border: 1px solid var(--hairline);
+  padding: 1px 5px; border-radius: var(--r-sm);
+}
+
+/* --- layout -------------------------------------------------------------- */
+
+[data-mdocui-stack] {
+  display: flex; flex-direction: column; gap: var(--space-4); min-width: 0;
+}
+[data-mdocui-stack][data-direction="horizontal"] { flex-direction: row; align-items: flex-start; }
+[data-mdocui-stack][data-align="center"] { align-items: center; }
+
+[data-mdocui-grid] {
+  display: grid; gap: var(--space-3); grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+[data-mdocui-grid][data-cols="1"] { grid-template-columns: minmax(0, 1fr); }
+[data-mdocui-grid][data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+[data-mdocui-grid][data-cols="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+/* Three tiles do not fit a phone. The agent says how many things belong
+   together; how many fit on a row is ours to decide, and it never gets to
+   cause a clip. */
+@container screen (max-width: 480px) {
+  [data-mdocui-grid][data-cols="3"],
+  [data-mdocui-grid][data-cols="4"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* A card on the screen is a map object: 1.5px node-border, never thickened. */
+[data-mdocui-card] {
+  background: var(--surface);
+  border: 1.5px solid var(--node-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--e-node);
+  padding: var(--space-3) var(--space-4);
+  display: flex; flex-direction: column; gap: var(--space-1);
+  min-width: 0;
+}
+[data-mdocui-card-title] {
+  font-weight: 600; font-size: var(--text-base); letter-spacing: -0.01em; color: var(--ink);
+}
+[data-mdocui-card-body] { color: var(--ink-muted); font-size: var(--text-sm); min-width: 0; }
+[data-mdocui-divider] {
+  border: 0; border-top: 1px solid var(--hairline); margin: 0; height: 0;
+}
+
+/* --- data ---------------------------------------------------------------- */
+
+[data-mdocui-table] {
+  width: 100%; border-collapse: collapse; font-size: var(--text-sm);
+  display: block; overflow-x: auto;
+}
+[data-mdocui-table] th {
+  text-align: left; font-weight: 500; font-size: var(--text-xs);
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-subtle);
+  padding: 0 var(--space-3) var(--space-2) 0; white-space: nowrap;
+}
+[data-mdocui-table] td {
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-top: 1px solid var(--hairline); white-space: nowrap; color: var(--ink);
+}
+
+[data-mdocui-stat] {
+  background: var(--surface); border: 1.5px solid var(--node-border);
+  border-radius: var(--r-lg); box-shadow: var(--e-node);
+  padding: var(--space-3) var(--space-4);
+  display: flex; flex-direction: column; gap: 2px;
+}
+[data-mdocui-stat-label] {
+  font-size: var(--text-xs); font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--ink-subtle);
+}
+[data-mdocui-stat-value] {
+  font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em;
+  line-height: 1.1; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+/* Trend stays ink: up and down are not error and warning, and there is no
+   second chromatic colour to spend on them. Flagged as a gap. */
+[data-mdocui-stat-change] { font-size: var(--text-sm); color: var(--ink-muted); }
+
+[data-mdocui-chart] { display: flex; flex-direction: column; gap: var(--space-2); }
+[data-mdocui-chart-title] { font-weight: 600; font-size: var(--text-sm); color: var(--ink); }
+[data-mdocui-chart-bars] {
+  display: flex; align-items: flex-end; gap: var(--space-2); height: 110px;
+}
+[data-mdocui-chart-col] {
+  flex: 1; display: flex; flex-direction: column; justify-content: flex-end;
+  gap: var(--space-1); align-items: center;
+}
+[data-mdocui-chart-bar] {
+  width: 100%; background: var(--accent);
+  border-radius: var(--r-sm) var(--r-sm) 2px 2px; min-height: 3px;
+}
+[data-mdocui-chart-label],
+[data-mdocui-chart-value] { font-size: var(--text-xs); color: var(--ink-subtle); }
+
+[data-mdocui-progress] { display: flex; flex-direction: column; gap: var(--space-2); }
+[data-mdocui-progress-track] {
+  background: var(--canvas); border: 1px solid var(--hairline);
+  border-radius: var(--r-full); height: 8px; overflow: hidden;
+}
+[data-mdocui-progress-fill] {
+  background: var(--accent); height: 100%; border-radius: var(--r-full);
+}
+[data-mdocui-progress-label] {
+  font-size: var(--text-sm); color: var(--ink-muted);
+  display: flex; justify-content: space-between; gap: var(--space-3);
+}
+[data-mdocui-progress-pct] { color: var(--ink-subtle); font-variant-numeric: tabular-nums; }
+
+/* --- content ------------------------------------------------------------- */
+
+/* State recolours the border. It never thickens it. */
+[data-mdocui-callout] {
+  background: var(--surface); border: 1px solid var(--hairline);
+  border-left: 3px solid var(--connector);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  padding: var(--space-3) var(--space-4); font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+[data-mdocui-callout][data-type="error"]   { border-left-color: var(--error); }
+[data-mdocui-callout][data-type="warning"] { border-left-color: var(--warning); }
+[data-mdocui-callout][data-type="success"] { border-left-color: var(--accent); }
+[data-mdocui-callout][data-type="info"]    { border-left-color: var(--connector); }
+.callout-title { font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+
+[data-mdocui-badge] {
+  display: inline-block; font-size: var(--text-xs); font-weight: 500;
+  padding: 2px var(--space-2); border-radius: var(--r-sm);
+  background: var(--canvas); border: 1px solid var(--hairline); color: var(--ink-muted);
+}
+[data-mdocui-image] { max-width: 100%; border-radius: var(--r-md); display: block; }
+[data-mdocui-code-block] {
+  background: var(--canvas); border: 1px solid var(--hairline);
+  border-radius: var(--r-md); padding: var(--space-3);
+  font-family: ui-monospace, 'SF Mono', monospace; font-size: var(--text-sm);
+  overflow-x: auto; color: var(--ink);
+}
+[data-mdocui-error] {
+  border: 1px solid var(--error-soft); color: var(--error);
+  border-radius: var(--r-md); padding: var(--space-3); font-size: var(--text-sm);
+}
+
+/* --- our own tags -------------------------------------------------------- */
+
+.timeline { display: flex; flex-direction: column; }
+.timeline-title {
+  font-weight: 600; font-size: var(--text-base); color: var(--ink);
+  margin-bottom: var(--space-2);
+}
+.timeline-row {
+  display: grid; grid-template-columns: 52px 11px 1fr;
+  align-items: start; gap: var(--space-3); padding-bottom: var(--space-4);
+}
+.timeline-when {
+  font-size: var(--text-xs); color: var(--ink-subtle); padding-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.timeline-rail { position: relative; height: 100%; }
+.timeline-dot {
+  width: 9px; height: 9px; border-radius: var(--r-full);
+  background: var(--surface); border: 1.5px solid var(--connector);
+  position: absolute; top: 5px; left: 0;
+}
+/* Connectors leave the parent and meet the child. 1.5px, round caps. */
+.timeline-row:not(:last-child) .timeline-rail::after {
+  content: ""; position: absolute; left: 4px; top: 16px; bottom: -12px;
+  width: 1.5px; background: var(--connector); border-radius: var(--r-full);
+}
+.timeline-what { font-size: var(--text-sm); font-weight: 600; color: var(--ink); }
+.timeline-note { font-size: var(--text-sm); color: var(--ink-muted); }
+
+.escape-frame {
+  width: 100%; border: 1px dashed var(--hairline); border-radius: var(--r-md);
+  background: var(--surface); display: block;
+}
+.escape-label {
+  font-size: var(--text-xs); font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--ink-subtle); margin-bottom: var(--space-1);
+}
+
+/* --- still working ------------------------------------------------------- */
+/* No gradients on UI, and only transform and opacity animate. So the
+   skeleton is flat canvas fill with an opacity breath, not a sweep. */
+
+.loading { display: flex; flex-direction: column; gap: var(--space-2); }
+.loading-label {
+  font-size: var(--text-xs); font-weight: 500; color: var(--ink-subtle);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+.loading-label::before {
+  content: ""; width: 7px; height: 7px; border-radius: var(--r-full);
+  background: var(--accent); animation: aos-breathe 1.4s var(--ease-micro) infinite;
+}
+.loading-lines { display: flex; flex-direction: column; gap: var(--space-2); }
+.loading-line {
+  height: 11px; border-radius: var(--r-sm);
+  background: var(--canvas); border: 1px solid var(--hairline);
+  animation: aos-breathe 1.4s var(--ease-micro) infinite;
+}
+.loading-line:nth-child(2) { animation-delay: 160ms; }
+.loading-line:nth-child(3) { animation-delay: 320ms; }
+
+@keyframes aos-breathe { 0%, 100% { opacity: 0.45 } 50% { opacity: 1 } }
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-line, .loading-label::before { animation: none; opacity: 1; }
+}

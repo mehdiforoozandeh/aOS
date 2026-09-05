@@ -1,0 +1,36 @@
+name: aos
+label: aOS
+kind: platform
+version: 0.1.0
+description: >
+  aOS gateway — the agent answers with a screen, not a message.
+
+  The agent never writes prose to the user. It builds a Markdoc document and
+  passes it to the `aos_show` tool, which validates it against the aOS screen
+  contract and pushes it to the browser surface. An invalid document comes back
+  as an error the model can repair inside the same turn.
+
+  Validation and rendering live in the aOS renderer service (Node), so the tag
+  registry, the validator and the agent's instructions all read from one source
+  and cannot drift.
+author: aOS
+
+# Declaring the tool here is what makes discovery import tools.py in CLI and
+# TUI processes. A `kind: platform` plugin is loaded lazily, so without this
+# the tool would never register outside the gateway.
+provides_tools:
+  - aos_show
+
+optional_env:
+  - name: AOS_RENDERER_URL
+    description: "Base URL of the aOS renderer service (default: http://127.0.0.1:9310)"
+    prompt: "Renderer URL"
+    password: false
+  - name: AOS_BRIDGE_PORT
+    description: "Port this adapter listens on for prompts from the browser (default: 9311)"
+    prompt: "Bridge port"
+    password: false
+  - name: AOS_ALLOW_ALL_USERS
+    description: "Allow any browser surface to talk to the agent (dev only)"
+    prompt: "Allow all users? (true/false)"
+    password: false

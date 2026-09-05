@@ -26,3 +26,15 @@ aOS-git-crypt.key
 *.log
 tmp/
 temp/
+
+# Dependencies and build output
+node_modules/
+dist/
+
+# Python bytecode from the Hermes plugin
+__pycache__/
+*.py[cod]
+
+# Scratch directories the services create at runtime
+.claude-cwd/
+.agent-cwd/
